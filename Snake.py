@@ -7,15 +7,17 @@ class Snake:
         self.body = []
         self.eyes = []
 
-        #On ajoute au corps du serpent son premier carré avec ses coordonnées, donc sa tête
+        # On ajoute au corps du serpent son premier carré
+        # avec ses coordonnées, donc sa tête
         coord_sneak = [50, 50, 60, 60]
         self.body.append(coord_sneak)
 
-        #On ajoute à la tête du serpent ses yeux
+        # On ajoute à la tête du serpent ses yeux
 
-        self.eyes.append([self.body[0][0] + 6, self.body[0][1] + 2, self.body[0][2] - 2, self.body[0][3] - 6,
-                          self.body[0][0] + 6, self.body[0][1] + 6, self.body[0][2] - 2, self.body[0][3] - 2])
-
+        self.eyes.append([self.body[0][0] + 6, self.body[0][1] + 2,
+                          self.body[0][2] - 2, self.body[0][3] - 6,
+                          self.body[0][0] + 6, self.body[0][1] + 6,
+                          self.body[0][2] - 2, self.body[0][3] - 2])
 
     def reset(self):
         self.__init__()
@@ -94,30 +96,31 @@ class Snake:
 
         return [x1, y1, x2, y2]
 
-
     def moveBody(self, direction, lenImage, dx, dy):
 
         i = 4
         j = 1
 
         while j < lenImage:
-            self.body[0][len(self.body[0]) - (i)] = self.body[0][len(self.body[0]) - (i + 4)]
-            self.body[0][len(self.body[0]) - (i - 1)] = self.body[0][len(self.body[0]) - (i + 3)]
-            self.body[0][len(self.body[0]) - (i - 2)] = self.body[0][len(self.body[0]) - (i + 2)]
-            self.body[0][len(self.body[0]) - (i - 3)] = self.body[0][len(self.body[0]) - (i + 1)]
+            self.body[0][len(self.body[0]) - (i)] \
+                = self.body[0][len(self.body[0]) - (i + 4)]
+            self.body[0][len(self.body[0]) - (i - 1)] \
+                = self.body[0][len(self.body[0]) - (i + 3)]
+            self.body[0][len(self.body[0]) - (i - 2)] \
+                = self.body[0][len(self.body[0]) - (i + 2)]
+            self.body[0][len(self.body[0]) - (i - 3)] \
+                = self.body[0][len(self.body[0]) - (i + 1)]
             i += 4
             j += 1
 
-        # On fait le serpent avancer
+        # Avancer du serpent
 
         self.body[0][0] = self.body[0][0] + dx
         self.body[0][1] = self.body[0][1] + dy
         self.body[0][2] = self.body[0][0] + 10
         self.body[0][3] = self.body[0][1] + 10
 
-        # Histoire que le serpent ne perde pas ses yeux en route on les fait
-        # également avancer avec lui XD mais cela en fonction de la direction
-        # choisi sinon ses yeux risquent de se ballader n'importe où :)
+        # Gestion des yeux
 
         if direction == 1:
             self.eyes[0][0] = self.body[0][0] + 2

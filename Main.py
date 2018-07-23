@@ -3,12 +3,13 @@ from random import randrange
 from Snake import Snake
 
 
-# Déclarations des fonctions
+# Déclaration des fonctions
 
 # Cette fonction permet de réinitialiser le jeu
 
 def new_game():
-    global dx, dy, x, y, eat, flag, snake, fullSnake, coord_fullSnake, direction, coord_eyes, eyes, score, f, flag2
+    global dx, dy, x, y, eat, flag, snake, fullSnake, coord_fullSnake
+    global direction, coord_eyes, eyes, score, f, flag2
 
     flag2 = 0
 
@@ -21,10 +22,22 @@ def new_game():
 
     snake.reset()
 
-    fullSnake = [can1.create_rectangle(snake.body[0][0], snake.body[0][1], snake.body[0][2], snake.body[0][3], fill="green")]
+    b0 = snake.body[0][0]
+    b1 = snake.body[0][1]
+    b2 = snake.body[0][2]
+    b3 = snake.body[0][3]
+    fullSnake = [can1.create_rectangle(b0, b1, b2, b3, fill="green")]
 
-    eyes = [can1.create_oval(snake.eyes[0][0], snake.eyes[0][1], snake.eyes[0][2], snake.eyes[0][3], fill="yellow")]
-    eyes.append(can1.create_oval(snake.eyes[0][4], snake.eyes[0][5], snake.eyes[0][6], snake.eyes[0][7], fill="yellow"))
+    e0 = snake.eyes[0][0]
+    e1 = snake.eyes[0][1]
+    e2 = snake.eyes[0][2]
+    e3 = snake.eyes[0][3]
+    e4 = snake.eyes[0][4]
+    e5 = snake.eyes[0][5]
+    e6 = snake.eyes[0][6]
+    e7 = snake.eyes[0][7]
+    eyes = [can1.create_oval(e0, e1, e2, e3, fill="yellow")]
+    eyes.append(can1.create_oval(e4, e5, e6, e7, fill="yellow"))
 
     eat = 0
 
@@ -43,11 +56,12 @@ def new_game():
 
 # Cette fonction permet d'effectuer une pause en cours de partie
 
+
 def pause(event):
     global flag, pause, flag2
     if flag2 != 1:
         if flag == 1:
-            pause = can1.create_text(250, 150, font=('Fixedsys', 18), text="PAUSE")
+            pause = can1.create_text(250, 150, font=('Arial', 18), text="STOP")
             flag = 0
         elif flag == 0:
             flag = 1
@@ -55,10 +69,11 @@ def pause(event):
             move()
 
 
-# Cette fonction va permettre de mettre le serpent en mouvement de manière automatique
+# Cette fonction met le serpent en mouvement de manière automatique
 
 def move():
-    global dx, dy, x, y, eat, flag, f, fullSnake, snake, coord_fullSnake, direction, coord_eyes, eyes, score, flag2
+    global dx, dy, x, y, eat, flag, f, fullSnake, snake, coord_fullSnake
+    global direction, coord_eyes, eyes, score, flag2
 
     # Si le serpent mange une proie on l'allonge d'un carré et cela
     # en fonction de la direction afin que le nouveau carré soit bien
@@ -67,17 +82,22 @@ def move():
     if snake.body[0][0] == x and snake.body[0][1] == y:
         can1.delete(f)
         eat = 1
-        coord = len(snake.body[0])#len(coord_fullSnake)
+        coord = len(snake.body[0])
         score = score + 100
 
-        #     # On rajoute un nouveau carré dans notre liste de carrés
+        # On rajoute un nouveau carré dans notre liste de carrés
         coordinates = snake.moveHead(direction)
-        fullSnake.append(can1.create_rectangle(coordinates[0], coordinates[1], coordinates[2], coordinates[3], fill="green"))
+        c0 = coordinates[0]
+        c1 = coordinates[1]
+        c2 = coordinates[2]
+        c3 = coordinates[3]
+        fullSnake.append(can1.create_rectangle(c0, c1, c2, c3, fill="green"))
 
     food()
 
-    # Les coordonnées de chaque carré prendront les coordonnées du carré qui le succède
-    # cela permettra à chacun des carré de se suivre et d'obtenir l'effet du serpent :)
+    # Les coordonnées de chaque carré prendront les coordonnées
+    # du carré qui le succède, cela permettra à chacun des carrés
+    # de se suivre et d'obtenir l'effet du serpent
 
     i = 4
     j = 1
@@ -89,21 +109,25 @@ def move():
 
     # Si le serpent touche le mur la partie s'arrête
 
-    if snake.body[0][0] >= 490 or snake.body[0][0] <= 0 or snake.body[0][1] >= 290 or snake.body[0][1] <= 0:
+    body0 = snake.body[0][0]
+    body1 = snake.body[0][1]
+    if body0 >= 490 or body0 <= 0 or body1 >= 290 or body1 <= 0:
         flag = 0
         flag2 = 1
-        loose = can1.create_text(250, 150, font=('Fixedsys', 18), text="Score : " + str(score))
+        text = "Score : " + str(score)
+        loose = can1.create_text(250, 150, font=('Arial', 18), text=text)
 
-    # Si les coordonnées du 1er carré sont égales aux coordonnées d'un des autres carrés composant le serpent
-    # cela signifie qu'il s'est recoupé par conséquent la partie s'arrête :p
-
+    # Si le serpent rentre dans son corps la partie s'arrête
 
     while j < len(fullSnake):
-        if snake.body[0][0] == snake.body[0][i] and snake.body[0][1] == snake.body[0][i + 1] and snake.body[0][2] == \
-                snake.body[0][i + 2] and snake.body[0][3] == snake.body[0][i + 3]:
+        if snake.body[0][0] == snake.body[0][i] \
+                and snake.body[0][1] == snake.body[0][i + 1] \
+                and snake.body[0][2] == snake.body[0][i + 2] \
+                and snake.body[0][3] == snake.body[0][i + 3]:
             flag = 0
             flag2 = 1
-            loose = can1.create_text(250, 150, font=('Fixedsys', 18), text="Score : " + str(score))
+            text = "Score : " + str(score)
+            loose = can1.create_text(250, 150, font=('Arial', 18), text=text)
         i += 4
         j += 1
 
@@ -112,16 +136,28 @@ def move():
 
     if flag != 0:
 
-        # On redéfinie les coordonnées des yeux de notre cher serpent
+        # On redéfinie les coordonnées des yeux du serpent
 
-        can1.coords(eyes[0], snake.eyes[0][0], snake.eyes[0][1], snake.eyes[0][2], snake.eyes[0][3])
-        can1.coords(eyes[1], snake.eyes[0][4], snake.eyes[0][5], snake.eyes[0][6], snake.eyes[0][7])
+        e0 = snake.eyes[0][0]
+        e1 = snake.eyes[0][1]
+        e2 = snake.eyes[0][2]
+        e3 = snake.eyes[0][3]
+        e4 = snake.eyes[0][4]
+        e5 = snake.eyes[0][5]
+        e6 = snake.eyes[0][6]
+        e7 = snake.eyes[0][7]
+        can1.coords(eyes[0], e0, e1, e2, e3)
+        can1.coords(eyes[1], e4, e5, e6, e7)
 
         while j < len(fullSnake):
-            # On redéfinie les coordonnées de chacun des carré
+            # On redéfinie les coordonnées de chacun des carrés
             # composant le corps du serpent
 
-            can1.coords(fullSnake[j], snake.body[0][i], snake.body[0][i + 1], snake.body[0][i + 2], snake.body[0][i + 3])
+            bi0 = snake.body[0][i]
+            bi1 = snake.body[0][i + 1]
+            bi2 = snake.body[0][i + 2]
+            bi3 = snake.body[0][i + 3]
+            can1.coords(fullSnake[j], bi0, bi1, bi2, bi3)
 
             i += 4
             j += 1
@@ -130,7 +166,7 @@ def move():
         fen1.after(50, move)
 
 
-# Cette fonction va permettre de générer au hasard de la nourriture dans le canevas
+# Cette fonction génère au hasard de la nourriture dans le canevas
 
 def food():
     global eat, x, y, f, snake
@@ -140,10 +176,7 @@ def food():
         i = 0
         i2 = 0
 
-        # Afin d'éviter de générer de la nourriture sur le serpent
-        # j'utilise ce bout de code qui s'occupera de générer un nouveau de tas de nourriture
-        # si les coordonnées du précédent sont égales aux coordonnées d'un carré composant
-        # le corps du serpent
+        # On vérifie que la nourriture n'apparait pas sur le serpent
 
         while i < len(snake.body[0]):
             i2 = 1
@@ -211,11 +244,13 @@ can1.grid(row=0, column=0, rowspan=10)
 
 # On crée le bouton New game qui va permettre de réinitialiser la partie
 
-Button(fen1, text="New game", font=("Fixedsys"), command=new_game).grid(row=4, column=1, sticky=N, padx=5)
-Button(fen1, text="Quit", font=("Fixedsys"), command=fen1.destroy).grid(row=6, column=1, sticky=N)
+Button(fen1, text="New game", font=("Fixedsys"), command=new_game)\
+    .grid(row=4, column=1, sticky=N, padx=5)
+Button(fen1, text="Quit", font=("Fixedsys"), command=fen1.destroy)\
+    .grid(row=6, column=1, sticky=N)
 
 # Délimitations des limites (Création des murs)
-# que le serpent ne doit outre passer pour ne pas finir dans le mur
+# que le serpent ne doit outre passer pour ne pas mourir
 
 can1.create_rectangle(0, 0, 10, 300, fill="black")
 can1.create_rectangle(0, 0, 500, 10, fill="black")
@@ -228,12 +263,24 @@ snake = Snake()
 
 # Définition des coordonnées de départ du serpent
 
-fullSnake = [ can1.create_rectangle(snake.body[0][0], snake.body[0][1], snake.body[0][2], snake.body[0][3], fill="green")]
+b0 = snake.body[0][0]
+b1 = snake.body[0][1]
+b2 = snake.body[0][2]
+b3 = snake.body[0][3]
+fullSnake = [can1.create_rectangle(b0, b1, b2, b3, fill="green")]
 
 # On lui dessine ses yeux
 
-eyes = [can1.create_oval(snake.eyes[0][0], snake.eyes[0][1], snake.eyes[0][2], snake.eyes[0][3], fill="yellow")]
-eyes.append(can1.create_oval(snake.eyes[0][4], snake.eyes[0][5], snake.eyes[0][6], snake.eyes[0][7], fill="yellow"))
+e0 = snake.eyes[0][0]
+e1 = snake.eyes[0][1]
+e2 = snake.eyes[0][2]
+e3 = snake.eyes[0][3]
+e4 = snake.eyes[0][4]
+e5 = snake.eyes[0][5]
+e6 = snake.eyes[0][6]
+e7 = snake.eyes[0][7]
+eyes = [can1.create_oval(e0, e1, e2, e3, fill="yellow")]
+eyes.append(can1.create_oval(e4, e5, e6, e7, fill="yellow"))
 
 # Définition du drapeau ( indicateur permettant d'arrêter le programme )
 
@@ -253,7 +300,7 @@ dy = 0
 
 # Etant donné que le serpent avance vers la droite
 # on assigne 2 à direction qui correspond à la
-# fonction right() afin que rien ne soit chamboulé
+# fonction right()
 
 direction = 2
 
@@ -264,7 +311,7 @@ pause = 0
 
 # Ce compteur va permettre de ne pas remettre
 # le jeu en route à l'aide de la touche pause
-# dans le cas où le joueur aurait perdu :p
+# dans le cas où le joueur aurait perdu
 
 flag2 = 0
 move()
