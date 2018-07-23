@@ -2,7 +2,6 @@ class Snake:
     body = []
     eyes = []
 
-
     def __init__(self):
 
         self.body = []
